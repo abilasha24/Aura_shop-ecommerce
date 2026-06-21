@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import { Inter, Outfit } from 'next/font/google';
 import './globals.css';
 import Navbar from '@/components/Navbar';
+import { Suspense } from 'react';
 import ClientInitializer from '@/components/ClientInitializer';
 
 const inter = Inter({
@@ -31,7 +32,9 @@ export default function RootLayout({
     <html lang="en" className={`${inter.variable} ${outfit.variable} antialiased`}>
       <body className="flex flex-col min-h-screen bg-surface-50 text-surface-900">
         <ClientInitializer>
-          <Navbar />
+          <Suspense fallback={<div className="h-16 bg-white border-b border-surface-200" />}>
+            <Navbar />
+          </Suspense>
           <main className="flex-grow">
             {children}
           </main>
