@@ -6,17 +6,14 @@ import { getProducts, getProductById, getCategories, addReview, getRecommendatio
 import { getCart, addToCart, updateCartItem, removeCartItem, syncCart } from './controllers/cart.controller.js';
 import { requireAuth } from './middleware/auth.middleware.js';
 
-
 dotenv.config();
 
 const app = express();
-const PORT = process.env.PORT || 5000;
 
-app.use(cors());
+app.use(cors({ origin: '*' }));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// Health check
 app.get('/', (req, res) => {
     res.json({ message: 'Ecommerce API is running!', status: 'OK' });
 });
@@ -45,9 +42,12 @@ app.put('/cart/update/:id', requireAuth, updateCartItem);
 app.delete('/cart/remove/:id', requireAuth, removeCartItem);
 app.post('/cart/sync', requireAuth, syncCart);
 
-// Start server
-app.listen(PORT, () => {
-    console.log(`Server running on http://localhost:${PORT}`);
-});
+// For local development
+if (process.env.NODE_ENV !== 'production') {
+    const PORT = process.env.PORT || 5000;
+    app.listen(PORT, () => {
+        console.log(`Server running on http://localhost:${PORT}`);
+    });
+}
 
 export default app;
